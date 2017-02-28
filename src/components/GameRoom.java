@@ -4,10 +4,8 @@ import toysnamefile.WorkInFile;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
 /**
  * Created by anton.mazur on 2/27/2017.
  */
@@ -89,6 +87,7 @@ public class GameRoom {
     }
 
     private  static void sortToys(){
-        Collections.sort(toysForGameRoom,new ToysComparatorByCost());
+        Comparator<Toy> comparator = new ToysComparatorByCost().thenComparing(new ToysComparatorBySize());
+        Collections.sort(toysForGameRoom, comparator);
     }
 }
