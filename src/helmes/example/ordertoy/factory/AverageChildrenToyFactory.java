@@ -11,6 +11,8 @@ import helmes.example.ordertoy.use.ToyUse;
 
 public class AverageChildrenToyFactory implements ToyFactory {
 
+    private static final double QUALITY_OF_TOY = 0.85;
+
     @Override
     public ToyState createToyState() {
         return new SolidToy();
@@ -19,5 +21,10 @@ public class AverageChildrenToyFactory implements ToyFactory {
     @Override
     public ToyUse createToyUse() {
         return new EntertainmentToy();
+    }
+
+    @Override
+    public double setQuality() {
+        return QUALITY_OF_TOY;
     }
 }

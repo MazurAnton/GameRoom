@@ -5,5 +5,7 @@ package helmes.example.ordertoy.state;
  */
 public interface ToyState {
 
-    void hit();
+    double MAX_TOY_HIT_COEFFICIENT = 1.0;
+
+    double hit();
 }

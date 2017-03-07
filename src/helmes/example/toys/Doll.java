@@ -3,7 +3,6 @@ package helmes.example.toys;
 import helmes.example.ordertoy.factory.SmallChildrenToyFactory;
 import helmes.example.utilities.RandomToyCharacteristicsUtility;
 
-import java.io.FileNotFoundException;
 
 /**
  * Created by anton.mazur on 2/27/2017.
@@ -14,10 +13,21 @@ public class Doll extends Toy {
     private String kindOfDolle;
 
 
-    public Doll() throws FileNotFoundException {
+    public Doll() {
         super(DOLL, new SmallChildrenToyFactory());
         kindOfDolle = RandomToyCharacteristicsUtility
                 .setToysCharacteristicsRandomly(this, MaxPredictedValueOfToy.DOLL_MAX_PREDICTED_COST);
+    }
+
+    public void play() {
+
+        double toyQuality;
+
+        super.play();
+        toyQuality = getToyQuality() +
+                ((double)MaxPredictedValueOfToy.DOLL_MAX_PREDICTED_COST /
+                        (double)MaxPredictedValueOfToy.TOY_5_TIMES_MAX_PREDICTED_COST);
+        setToyQuality(toyQuality);
     }
 
     @Override

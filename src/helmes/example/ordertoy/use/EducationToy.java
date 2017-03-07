@@ -5,12 +5,22 @@ package helmes.example.ordertoy.use;
  */
 public class EducationToy implements ToyUse {
 
+    private double toyLearnCoefficient = 0.325;
+
     @Override
-    public void play() {
+    public double learn() {
+
+        double willReturn;
+
+        willReturn = toyLearnCoefficient > ToyUse.MAX_TOY_LEARN_COEFFICIENT
+                ? ToyUse.MAX_TOY_LEARN_COEFFICIENT : toyLearnCoefficient;
+        toyLearnCoefficient += toyLearnCoefficient;
+
+        return willReturn;
     }
 
     @Override
     public String toString() {
-        return "EducationToy{}";
+        return "education";
     }
 }

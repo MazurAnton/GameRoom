@@ -10,4 +10,5 @@ public interface ToyFactory {
 
     ToyState createToyState();
     ToyUse createToyUse();
+    double setQuality();
 }

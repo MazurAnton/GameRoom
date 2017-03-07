@@ -9,6 +9,7 @@ import helmes.example.ordertoy.use.ToyUse;
  */
 abstract public class Toy {
 
+    private static final double TOY_MAX_QUALITY = 1.0;
 
     /**
      * declare toys size
@@ -25,6 +26,7 @@ abstract public class Toy {
     protected ToySize toySize;
     private ToyUse toyUse;
     private ToyState toyState;
+    private double toyQuality;
 
     /**
      * toys constructors
@@ -34,20 +36,16 @@ abstract public class Toy {
         this.toyName = toyName;
         this.toyUse = toyFactory.createToyUse();
         this.toyState = toyFactory.createToyState();
+        this.toyQuality = toyFactory.setQuality();
+    }
+
+    public void play() {
+        toyQuality -= (1 - toyUse.learn()) * (1 - toyState.hit());
     }
 
     /**
      * toys methods
      */
-
-    @Override
-    public String toString() {
-        return "toyName='" + toyName + '\'' +
-                ", toyCost=" + toyCost +
-                ", toyUse=" + toyUse +
-                ", toyState=" + toyState +
-                ", toySize='" + toySize + '\'' + ", ";
-    }
 
     public void setToyName(String toyName) {
         this.toyName = toyName;
@@ -75,6 +73,24 @@ abstract public class Toy {
 
     public void setToySize(ToySize toySize) {
         this.toySize = toySize;
+    }
+
+    public double getToyQuality() {
+        return toyQuality;
+    }
+
+    public void setToyQuality(double toyQuality) {
+        this.toyQuality =
+                (toyQuality > TOY_MAX_QUALITY ? TOY_MAX_QUALITY : toyQuality);
+    }
+
+    @Override
+    public String toString() {
+        return "Quality='" + toyQuality + '\'' +
+                ", Cost=" + toyCost +
+                ", Use=" + toyUse +
+                ", State=" + toyState +
+                ", Size='" + toySize + '\'' + ", ";
     }
 
 }

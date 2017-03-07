@@ -5,5 +5,7 @@ package helmes.example.ordertoy.use;
  */
 public interface ToyUse {
 
-    void play();
+    double MAX_TOY_LEARN_COEFFICIENT = 1.0;
+
+    double learn();
 }

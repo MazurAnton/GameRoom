@@ -5,13 +5,22 @@ package helmes.example.ordertoy.state;
  */
 public class SolidToy implements ToyState {
 
+    private double toyHitCoefficient = 0.35;
+
     @Override
-    public String toString() {
-        return "SolidToy{}";
+    public double hit() {
+
+        double willReturn;
+
+        willReturn = toyHitCoefficient > ToyState.MAX_TOY_HIT_COEFFICIENT
+                ? ToyState.MAX_TOY_HIT_COEFFICIENT : toyHitCoefficient;
+        toyHitCoefficient += toyHitCoefficient;
+
+        return willReturn;
     }
 
     @Override
-    public void hit() {
-
+    public String toString() {
+        return "solid";
     }
 }

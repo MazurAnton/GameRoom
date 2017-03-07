@@ -2,77 +2,68 @@ package helmes.example.gameroom;
 
 import helmes.example.utilities.FileUtilities;
 import helmes.example.toys.Toy;
+import helmes.example.utilities.RandomToyUtility;
 
-import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
  * Created by anton.mazur on 2/27/2017.
  */
-public class GameRoom {
+public enum GameRoom {
 
-    private static GameRoom gameRoom;
-    private static int totalMoneyOnToys;
-    private static int maxAgeOfChildrens = 99;
-    private static List<Toy> toysForGameRoom = new LinkedList<Toy>();
+    GAMEROOM;
+    private static final String ARE_NUMBERS = "\\d+";
 
-    private GameRoom()
-            throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+
+    private int totalMoneyOnToys = 500;
+    private int maxAgeOfChildrens = 99;
+    private List<Toy> toysForGameRoom = new LinkedList<Toy>();
+
+    GameRoom() {
         generateToys();
     }
 
-
-    public static void getInstance(int totalMoney)
-            throws FileNotFoundException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        if (gameRoom == null) {
-            totalMoneyOnToys = totalMoney;
-            gameRoom = new GameRoom();
-        }
+    public void setGameRoom(int totalMoneyOnToys, int maxAgeOfChildrens) {
+        this.totalMoneyOnToys = totalMoneyOnToys;
+        this.maxAgeOfChildrens = maxAgeOfChildrens;
+        toysForGameRoom.clear();
+        generateToys();
     }
 
-    public static void getInstance(int totalMoney, int maxAge)
-            throws FileNotFoundException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        if (gameRoom == null) {
-            maxAgeOfChildrens = maxAge;
-            totalMoneyOnToys = totalMoney;
-            gameRoom = new GameRoom();
-        }
-    }
-
-
-    private static void generateToys()
-            throws FileNotFoundException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+    private void generateToys() {
 
         int totalSum = 0;
+        String toyName = null;
 
         do {
-            Class myClass = Class.forName("helmes.example.toys." +
-                    generateToyName());
-            Object myObject = myClass.newInstance();
-            Toy someToyObject = (Toy) myObject;
+            toyName = generateToyName();
+            Toy someToyObject = RandomToyUtility.generateToy(toyName);
+            if (someToyObject == null) {
+                continue;
+            }
             totalSum += someToyObject.getToyCost();
             toysForGameRoom.add(someToyObject);
         } while (totalSum <= totalMoneyOnToys);
 
     }
 
-    public static String getNamesOfToysDependingOnMaxAge() throws FileNotFoundException {
+    private String getNamesOfToysDependingOnMaxAge() {
 
         String[] nameAndCategoryOfToys = FileUtilities.read(FileUtilities.FILE_WITH_TOY_CATAGORY).split("\n");
         Integer age = new Integer("2");
         StringBuffer stringbuff = new StringBuffer();
 
         for (String some : nameAndCategoryOfToys) {
-            if (some.matches("\\d+"))
+            if (some.matches(ARE_NUMBERS))
                 if (age.parseInt(some) >= maxAgeOfChildrens)
                     break;
-            if (!(some.matches("\\d+")))
+            if (!(some.matches(ARE_NUMBERS)))
                 stringbuff.append(some + " ");
         }
         return stringbuff.toString();
     }
 
-    public static void seeToys() {
+    public void seeToys() {
         sortToys();
         for (Toy toy : toysForGameRoom) {
             System.out.print(toy + "\n");
@@ -80,7 +71,7 @@ public class GameRoom {
 
     }
 
-    public static String generateToyName() throws FileNotFoundException {
+    private String generateToyName() {
 
         Random random = new Random();
 
@@ -91,8 +82,15 @@ public class GameRoom {
         return toysNames[randomNameIndex];
     }
 
-    private static void sortToys() {
-        Comparator<Toy> comparator = new ToysComparatorByCost().thenComparing(new ToysComparatorBySize());
+    public void playWithToys() {
+        for (Toy toy: toysForGameRoom)
+        toy.play();
+    }
+
+    private void sortToys() {
+        Comparator<Toy> comparator = new ToysComparatorByCost();
+        comparator.thenComparing(new ToysComparatorByQuality());
+        comparator.thenComparing(new ToysComparatorBySize());
         Collections.sort(toysForGameRoom, comparator);
     }
 }
